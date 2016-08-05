@@ -74,7 +74,8 @@ rxGetInfo(flightsXdf, getVarInfo = TRUE)
 # To start with, use rxSort to sort flightsXdf by arrival delay (arr_delay)
 
 # Here's a path to a new XDF file to write to:
-flightsSorted <- "flights_sorted.xdf"
+# flightsSorted <- "flights_sorted.xdf"
+flightsSorted <- tempfile(fileext = ".xdf")
 
 
 # Write your rxSort here:
@@ -101,8 +102,8 @@ rxDataStep(flightsSorted, numRows = 10)
 # Try that here:
 rxSort(inData = flightsXdf,
        outFile = flightsSorted,
-       sortByVars = "arr_delay",
-       decreasing = TRUE,
+       sortByVars = "arr_delay", # multi-vars c("Var1", "Var2")
+       decreasing = TRUE, # multi-vars c(TRUE, FALSE)
        overwrite = TRUE)
 
 
@@ -131,6 +132,7 @@ rxSort(inData = flightsXdf,
        outFile = uniqueCarriers,
        sortByVars = "carrier",
        removeDupKeys = TRUE,
+       dupFreqVar = "freq", 
        overwrite = TRUE)
 
 
@@ -168,11 +170,22 @@ rxDataStep(uniqueCarriers)
 # - matchVars: the name of the variable(s) that links the two tables
 
 # Here's the airlines XDF:
+airlinesCsv <- "airlines.csv"
+
+# Put it in an XDF file called:
 airlinesXdf <- "airlines.xdf"
+
+
+rxImport(inData = airlinesCsv,
+         outFile = airlinesXdf)
+
 
 # And a file for the results:
 carrier_decoded <- "carrier_decoded.xdf"
 
+# check input files
+rxDataStep(uniqueCarriers, numRows = 5)
+rxDataStep(airlinesXdf, numRows = 5)
 
 # Write your rxMerge here:
 rxMerge(inData1 = uniqueCarriers,
@@ -182,6 +195,9 @@ rxMerge(inData1 = uniqueCarriers,
         
         # Type of join
         type = "left",
+        
+        # FYI if key names don't match between tables
+        # newVarNames2 = c(myCarrier = "carrier"),
         
         # Name the key variable(s)
         matchVars = "carrier"
