@@ -201,6 +201,9 @@ rxMerge(inData1 = uniqueCarriers,
         
         # Name the key variable(s)
         matchVars = "carrier"
+        
+        # Add extension to var names that exist in both datasets
+        # duplicateVarExt = c("origin", "dest")
 )
 
 
@@ -474,7 +477,7 @@ rxFactors(inData = flightsXdf,
           outFile = flightsXdf,
           overwrite = TRUE,
           factorInfo = list( dayOfWeek_Factor = list(
-                                 newVar = "dayOfWeek",
+                                 varName = "dayOfWeek",
                                  levels = c("Sunday", "Monday", "Tuesday",
                                             "Wednesday", "Thursday", "Friday",
                                             "Saturday")
