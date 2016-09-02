@@ -40,6 +40,7 @@ flightsCsv <- "flights.csv"
 # Put it in an XDF file called:
 flightsXdf <- "flights.xdf"
 
+testDF <- rxImport(inData = flightsCsv)
 
 rxImport(inData = flightsCsv,
          outFile = flightsXdf)
